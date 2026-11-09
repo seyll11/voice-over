@@ -1,0 +1,7 @@
+.env
+target/
+.idea/
+*.iml
+node_modules/
+src/main/frontend/generated/
+src/main/bundles/
