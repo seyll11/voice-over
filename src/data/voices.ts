@@ -1,0 +1,130 @@
+import { VoiceProfile, VoiceStylePreset, ScriptTemplate } from '../types';
+
+export const VOICES: VoiceProfile[] = [
+  {
+    id: 'Kore',
+    name: 'Kore',
+    gender: 'female',
+    badge: 'Paling Populer',
+    description: 'Suara wanita hangat, tenang, dan bersahabat. Cocok untuk narasi, buku audio, dan video edukasi.',
+    recommendedFor: ['Narasi Santai', 'Audiobook', 'Dokumenter', 'Edukasi'],
+    avatarColor: 'from-amber-400 to-rose-400',
+  },
+  {
+    id: 'Puck',
+    name: 'Puck',
+    gender: 'male',
+    badge: 'Energetik',
+    description: 'Suara pria muda yang ceria, bersemangat, dan penuh energi. Ideal untuk iklan media sosial, TikTok, & Reels.',
+    recommendedFor: ['Iklan TikTok/Reels', 'Promo Penjualan', 'Podcast Remaja', 'Vlog'],
+    avatarColor: 'from-indigo-400 to-cyan-400',
+  },
+  {
+    id: 'Fenrir',
+    name: 'Fenrir',
+    gender: 'male',
+    badge: 'Berat & Karismatik',
+    description: 'Suara pria berat, dalam, berwibawa, dan kuat. Sempurna untuk berita formal, sinematik, dan narasi epik.',
+    recommendedFor: ['Berita Formal', 'Trailer Film', 'Sinematik', 'Presentasi Bisnis'],
+    avatarColor: 'from-purple-500 to-indigo-700',
+  },
+  {
+    id: 'Zephyr',
+    name: 'Zephyr',
+    gender: 'female',
+    badge: 'Jelas & Profesional',
+    description: 'Suara wanita jernih, artikulatif, dan formal. Sangat pas untuk modul pelatihan, customer service, & tutorial.',
+    recommendedFor: ['Tutorial Video', 'E-Learning', 'Panduan Aplikasi', 'Berita'],
+    avatarColor: 'from-emerald-400 to-teal-600',
+  },
+  {
+    id: 'Charon',
+    name: 'Charon',
+    gender: 'male',
+    badge: 'Elegan & Misterius',
+    description: 'Suara pria dewasa dengan nada tenang, berbobot, dan puitis. Bagus untuk cerita misteri, renungan, dan refleksi.',
+    recommendedFor: ['Cerita Misteri', 'Renungan & Meditasi', 'Filosofis', 'Puisi'],
+    avatarColor: 'from-slate-400 to-zinc-600',
+  },
+];
+
+export const STYLE_PRESETS: VoiceStylePreset[] = [
+  {
+    id: 'natural',
+    label: 'Alami & Percakapan',
+    description: 'Gaya bicara natural seperti sedang mengobrol santai dengan teman.',
+    prompt: 'Natural, warm, friendly conversational tone with gentle breathing and expressive cadence',
+    icon: 'MessageSquare',
+  },
+  {
+    id: 'commercial',
+    label: 'Iklan & Promosi Ceria',
+    description: 'Dinamis, menarik perhatian, dan meyakinkan untuk konten penjualan.',
+    prompt: 'Energetic, enthusiastic, persuasive commercial voiceover with upbeat rhythm and punchy delivery',
+    icon: 'Sparkles',
+  },
+  {
+    id: 'news',
+    label: 'Berita & Formal',
+    description: 'Artikulasi tajam, tegas, netral, dan berwibawa layaknya pembaca berita.',
+    prompt: 'Clear, authoritative, highly articulate professional news anchor tone with measured pacing',
+    icon: 'Radio',
+  },
+  {
+    id: 'storytelling',
+    label: 'Narasi Cerita & Sinematik',
+    description: 'Penuh penghayatan emosional, tempo dramatis, dan memikat pendengar.',
+    prompt: 'Dramatic, evocative, immersive storytelling narrator with expressive pauses and emotional warmth',
+    icon: 'BookOpen',
+  },
+  {
+    id: 'calm',
+    label: 'Menenangkan / Meditasi',
+    description: 'Tempo lambat, lembut, menenangkan jiwa, dan meredakan ketegangan.',
+    prompt: 'Deeply relaxing, soft-spoken, soothing mindfulness meditation voice with slow steady pacing',
+    icon: 'Moon',
+  },
+];
+
+export const SCRIPT_TEMPLATES: ScriptTemplate[] = [
+  {
+    id: 'iklan-kopi',
+    title: 'Iklan Kopi Susu Senja',
+    category: 'commercial',
+    voice: 'Puck',
+    style: 'Energetic, enthusiastic, persuasive commercial voiceover with upbeat rhythm',
+    text: 'Pernah merasa lelah setelah seharian terjebak rutinitas? Jangan biarkan semangatmu padam! Rasakan sensasi lembutnya biji kopi pilihan berpadu dengan susu krimer segar di Kopi Kenangan Senja. Satu tegukan, langsung bangkitkan inspirasimu. Dapatkan promo beli satu gratis satu hanya hari ini. Pesan sekarang juga di gerai terdekat!',
+  },
+  {
+    id: 'narasi-dokumenter',
+    title: 'Narasi Alam Dokumenter',
+    category: 'storytelling',
+    voice: 'Kore',
+    style: 'Dramatic, evocative, immersive storytelling narrator with expressive pauses',
+    text: 'Di balik kabut tipis pegunungan Bromo, mentari pagi perlahan menyapa bumi Nusantara. Angin dingin berhembus lembut, membawa aroma tanah basah dan ketenangan yang jarang dijumpai di hiruk pikuk perkotaan. Di sinilah, keajaiban alam dan kearifan lokal hidup berdampingan secara abadi.',
+  },
+  {
+    id: 'berita-teknologi',
+    title: 'Berita Kilas Teknologi',
+    category: 'news',
+    voice: 'Fenrir',
+    style: 'Clear, authoritative, highly articulate professional news anchor tone',
+    text: 'Selamat malam pemirsa, kabar utama malam ini. Perkembangan kecerdasan buatan kini memasuki era baru dengan diperkenalkannya model audio generasi mutakhir. Teknologi ini memungkinkan penciptaan suara alami dengan modulasi emosi yang menyerupai manusia, membuka peluang baru di industri kreatif dan edukasi digital.',
+  },
+  {
+    id: 'tutorial-aplikasi',
+    title: 'Panduan Aplikasi Edukasi',
+    category: 'tutorial',
+    voice: 'Zephyr',
+    style: 'Clear, structured, encouraging instructional educator voice',
+    text: 'Halo dan selamat datang! Pada panduan singkat kali ini, kita akan mempelajari bagaimana cara mengoptimalkan alur kerja harian Anda dalam tiga langkah mudah. Pertama, susun prioritas tugas utama Anda. Kedua, manfaatkan fitur otomatisasi cerdas. Dan yang ketiga, selalu lakukan evaluasi di akhir hari. Mari kita mulai!',
+  },
+  {
+    id: 'refleksi-malam',
+    title: 'Renungan & Relaksasi Malam',
+    category: 'storytelling',
+    voice: 'Charon',
+    style: 'Deeply relaxing, soft-spoken, soothing mindfulness meditation voice',
+    text: 'Tarik napas dalam-dalam... hembuskan perlahan. Hari ini telah kamu lalui dengan segala perjuangannya. Lepaskan seluruh penat dan ketegangan di pundakmu. Tidak ada lagi yang perlu kamu khawatirkan malam ini. Istirahatlah dengan damai, karena esok menyimpan harapan baru yang menantimu.',
+  },
+];

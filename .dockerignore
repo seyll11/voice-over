@@ -1,7 +1,0 @@
-target/
-node_modules/
-.git/
-.idea/
-.env
-src/main/bundles/
-src/main/frontend/generated/

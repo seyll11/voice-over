@@ -1,0 +1,6 @@
+{
+  "name": "SuaraAI - AI Voice Over Studio",
+  "description": "Studio pembuatan voice over otomatis bertenaga AI. Ubah naskah dan skrip menjadi audio narasi alami, jernih, dan profesional dalam hitungan detik.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
