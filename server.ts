@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
-import { shapeWavWithProfile, VoiceDspProfile } from './src/utils/dspVoiceShaper';
+import { shapeWavWithProfile, VoiceDspProfile } from './src/utils/dspVoiceShaper.ts';
 
 dotenv.config();
 
