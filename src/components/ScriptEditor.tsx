@@ -210,8 +210,8 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
         />
 
         {/* Status / Counters Footer */}
-        <div className="px-4 py-2.5 bg-slate-950/70 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
-          <div className="flex items-center gap-4">
+        <div className="px-4 py-2.5 bg-slate-950/70 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+          <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5">
               <FileText className="w-3.5 h-3.5 text-slate-500" />
               <strong className="text-slate-200 font-mono">{wordCount}</strong> kata
@@ -230,6 +230,17 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = ({
             </span>
           </div>
         </div>
+
+        {wordCount > 350 && (
+          <div className="px-4 py-2.5 bg-amber-500/10 border-t border-amber-500/20 text-amber-300 text-xs flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-base leading-none">💡</span>
+              <span>
+                <strong>Naskah Panjang ({wordCount} kata):</strong> Untuk naskah presentasi / skripsi panjang, gunakan tombol <strong>"Tes Cepat Browser"</strong> di bawah (bebas kuota, instan, &amp; tanpa batas kata). Jika ingin suara AI Gemini, bagi naskah per 200–300 kata agar tidak timeout.
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

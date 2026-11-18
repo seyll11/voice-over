@@ -1,0 +1,220 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net (Default Deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Core Security Helpers
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAllowedModel(model) {
+      return model in ['gemini-3.8-flash-lite-tts', 'gemini-3.8-flash-tts'];
+    }
+
+    function isValidUserStudioProfile(data) {
+      return data.keys().hasAll([
+          'uid',
+          'displayName',
+          'preferredVoice',
+          'voiceLocked',
+          'preferredModel',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'displayName',
+          'preferredVoice',
+          'voiceLocked',
+          'lockedStyle',
+          'preferredModel',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.uid is string
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && data.displayName is string
+        && data.displayName.size() >= 1
+        && data.displayName.size() <= 80
+        && data.preferredVoice is string
+        && data.preferredVoice.size() >= 2
+        && data.preferredVoice.size() <= 40
+        && data.voiceLocked is bool
+        && (!('lockedStyle' in data) || (data.lockedStyle is string && data.lockedStyle.size() <= 500))
+        && data.preferredModel is string
+        && isAllowedModel(data.preferredModel)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidVoicePreset(data) {
+      return data.keys().hasAll([
+          'ownerId',
+          'name',
+          'voiceId',
+          'stylePrompt',
+          'model',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'ownerId',
+          'name',
+          'voiceId',
+          'stylePrompt',
+          'model',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.ownerId is string
+        && isValidId(data.ownerId)
+        && data.ownerId == request.auth.uid
+        && data.name is string
+        && data.name.size() >= 1
+        && data.name.size() <= 80
+        && data.voiceId is string
+        && data.voiceId.size() >= 2
+        && data.voiceId.size() <= 40
+        && data.stylePrompt is string
+        && data.stylePrompt.size() >= 1
+        && data.stylePrompt.size() <= 500
+        && data.model is string
+        && isAllowedModel(data.model)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidVoiceOverTakeRecord(data) {
+      return data.keys().hasAll([
+          'ownerId',
+          'title',
+          'script',
+          'voice',
+          'mode',
+          'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'ownerId',
+          'title',
+          'script',
+          'voice',
+          'style',
+          'mode',
+          'createdAt'
+        ])
+        && data.ownerId is string
+        && isValidId(data.ownerId)
+        && data.ownerId == request.auth.uid
+        && data.title is string
+        && data.title.size() >= 1
+        && data.title.size() <= 120
+        && data.script is string
+        && data.script.size() >= 1
+        && data.script.size() <= 15000
+        && data.voice is string
+        && data.voice.size() >= 2
+        && data.voice.size() <= 80
+        && (!('style' in data) || (data.style is string && data.style.size() <= 500))
+        && data.mode is string
+        && data.mode in ['single', 'dialogue']
+        && data.createdAt is timestamp;
+    }
+
+    // User Studio Profile & Voice Lock Settings
+    match /users/{userId} {
+      allow get: if isVerified() && isOwner(userId) && isValidId(userId);
+      allow list: if false;
+      allow create: if isVerified()
+        && isOwner(userId)
+        && isValidId(userId)
+        && isValidUserStudioProfile(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isVerified()
+        && isOwner(userId)
+        && isValidId(userId)
+        && isValidUserStudioProfile(incoming())
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'displayName',
+          'preferredVoice',
+          'voiceLocked',
+          'lockedStyle',
+          'preferredModel',
+          'updatedAt'
+        ]);
+      allow delete: if isVerified() && isOwner(userId) && isValidId(userId);
+
+      // Saved Consistent Voice Presets
+      match /voicePresets/{presetId} {
+        allow get: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(presetId);
+        allow list: if isVerified() && isOwner(userId) && resource.data.ownerId == request.auth.uid;
+        allow create: if isVerified()
+          && isOwner(userId)
+          && isValidId(userId)
+          && isValidId(presetId)
+          && isValidVoicePreset(incoming())
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time;
+        allow update: if isVerified()
+          && isOwner(userId)
+          && isValidId(userId)
+          && isValidId(presetId)
+          && isValidVoicePreset(incoming())
+          && incoming().ownerId == existing().ownerId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'name',
+            'voiceId',
+            'stylePrompt',
+            'model',
+            'updatedAt'
+          ]);
+        allow delete: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(presetId);
+      }
+
+      // Saved Voice Over Takes
+      match /takes/{takeId} {
+        allow get: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(takeId);
+        allow list: if isVerified() && isOwner(userId) && resource.data.ownerId == request.auth.uid;
+        allow create: if isVerified()
+          && isOwner(userId)
+          && isValidId(userId)
+          && isValidId(takeId)
+          && isValidVoiceOverTakeRecord(incoming())
+          && incoming().createdAt == request.time;
+        allow update: if false;
+        allow delete: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(takeId);
+      }
+    }
+  }
+}

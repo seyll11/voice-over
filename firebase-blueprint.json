@@ -1,0 +1,196 @@
+{
+  "entities": {
+    "UserStudioProfile": {
+      "title": "UserStudioProfile",
+      "description": "User studio preferences including consistent voice lock configuration.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the user."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Display name shown in the studio."
+        },
+        "preferredVoice": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40,
+          "description": "Default locked voice character ID."
+        },
+        "voiceLocked": {
+          "type": "boolean",
+          "description": "Whether the selected voice is locked to prevent accidental changes."
+        },
+        "lockedStyle": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 500,
+          "description": "Consistent style prompt applied when voice lock is enabled."
+        },
+        "preferredModel": {
+          "type": "string",
+          "enum": ["gemini-3.8-flash-lite-tts", "gemini-3.8-flash-tts"],
+          "description": "Preferred Gemini TTS model."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "preferredVoice",
+        "voiceLocked",
+        "preferredModel",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "VoicePreset": {
+      "title": "VoicePreset",
+      "description": "Saved consistent voice persona preset created by a user.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner Firebase Auth UID."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Custom preset name."
+        },
+        "voiceId": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40,
+          "description": "Prebuilt Gemini TTS voice ID."
+        },
+        "stylePrompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Canonical style prompt for vocal consistency."
+        },
+        "model": {
+          "type": "string",
+          "enum": ["gemini-3.8-flash-lite-tts", "gemini-3.8-flash-tts"],
+          "description": "TTS engine model."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "name",
+        "voiceId",
+        "stylePrompt",
+        "model",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "VoiceOverTakeRecord": {
+      "title": "VoiceOverTakeRecord",
+      "description": "Saved voice over take metadata stored per user (excluding large binary audio).",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner Firebase Auth UID."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Short title or preview of the script."
+        },
+        "script": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 15000,
+          "description": "Full voice over script text."
+        },
+        "voice": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 80,
+          "description": "Voice character name used."
+        },
+        "style": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 500,
+          "description": "Voice delivery style prompt."
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["single", "dialogue"],
+          "description": "Single speaker or dual-speaker dialogue."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "script",
+        "voice",
+        "mode",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserStudioProfile"
+      },
+      "description": "Stores each authenticated user's studio profile and voice lock settings."
+    },
+    "/users/{userId}/voicePresets/{presetId}": {
+      "schema": {
+        "$ref": "#/entities/VoicePreset"
+      },
+      "description": "Stores user's saved custom consistent voice presets."
+    },
+    "/users/{userId}/takes/{takeId}": {
+      "schema": {
+        "$ref": "#/entities/VoiceOverTakeRecord"
+      },
+      "description": "Stores user's saved voice over take scripts and metadata."
+    }
+  }
+}

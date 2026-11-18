@@ -73,7 +73,7 @@ export const DialogueEditor: React.FC<DialogueEditorProps> = ({
             >
               {VOICES.map((v) => (
                 <option key={v.id} value={v.id}>
-                  {v.name} ({v.gender === 'female' ? 'Wanita' : 'Pria'})
+                  {v.name} ({v.badge})
                 </option>
               ))}
             </select>
@@ -91,7 +91,7 @@ export const DialogueEditor: React.FC<DialogueEditorProps> = ({
             >
               {VOICES.map((v) => (
                 <option key={v.id} value={v.id}>
-                  {v.name} ({v.gender === 'female' ? 'Wanita' : 'Pria'})
+                  {v.name} ({v.badge})
                 </option>
               ))}
             </select>
