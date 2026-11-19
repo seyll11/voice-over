@@ -42,7 +42,19 @@ PORT=3000
 
 > **Catatan:** Jika belum memiliki API Key, Anda bisa mendapatkannya secara gratis melalui [Google AI Studio](https://aistudio.google.com/).
 
-### 4. Jalankan Aplikasi
+### 4. Aktifkan Login Firebase untuk Domain Deploy
+
+Jika login menampilkan pesan `auth/unauthorized-domain`, tambahkan hostname situs yang sedang dibuka ke daftar domain yang diizinkan:
+
+1. Buka **Firebase Console** proyek aplikasi.
+2. Pilih **Authentication** > **Settings** > **Authorized domains**.
+3. Klik **Add domain**, lalu masukkan hostname Render, misalnya `nama-aplikasi.onrender.com` (tanpa `https://` atau path).
+4. Pastikan provider **Google** aktif di **Authentication** > **Sign-in method**.
+5. Muat ulang situs dan coba login kembali.
+
+Untuk login dengan email dan kata sandi, aktifkan juga provider **Email/Password** di halaman **Sign-in method**. Domain produksi perlu ditambahkan ke Firebase secara manual oleh pengelola proyek.
+
+### 5. Jalankan Aplikasi
 Jalankan server pengembangan dengan perintah:
 
 ```bash

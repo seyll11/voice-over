@@ -33,6 +33,9 @@ export const AuthPage: React.FC = () => {
     if (code === 'auth/operation-not-allowed' || msg.includes('operation-not-allowed')) {
       return 'Login Email & Kata Sandi belum diaktifkan di Firebase Console proyek ini. Silakan klik tombol "Masuk dengan Google" di bawah (langsung aktif), atau aktifkan provider Email/Password di Firebase Console > Authentication > Sign-in method.';
     }
+    if (code === 'auth/unauthorized-domain') {
+      return `Domain "${window.location.hostname}" belum diizinkan oleh Firebase Authentication. Tambahkan domain ini di Firebase Console > Authentication > Settings > Authorized domains, lalu muat ulang halaman.`;
+    }
     if (code === 'auth/email-already-in-use') {
       return 'Email ini sudah terdaftar. Silakan pindah ke tab "Masuk" untuk login.';
     }
